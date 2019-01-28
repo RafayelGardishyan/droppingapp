@@ -44,6 +44,7 @@
         let database = firebase.database().ref();
 		let marker;
 		let markers = []
+		let previous = {}
         function addPopup(latitude, longitude, mtitle){
 			markers.push(L.marker([latitude, longitude]).addTo(mymap));
 			//var popup = L.popup()
@@ -65,11 +66,14 @@
 				let obj = JSON.parse(snap.val()[k]);
 				try{
 					addPopup(obj.latitude, obj.longitude, k);
+					var polyline = L.polyline([[obj.latitude, obj.longitude], [obj.latitude + 0.000005, obj.longitude + 0.000005]], {color: 'red'}).addTo(mymap);
+					//myMap.fitBounds(polyline.getBounds());
 					console.log(obj);
 				} catch {
 					console.log("Invalid data: " + obj);
 				}
             });
+			previous = snap.val();
         });
 
 
